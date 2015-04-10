@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "dimensions": [
+    { "field_name": "submissionDate",   "allowed_values": "__TARGET__" },
+    { "field_name": "sourceName",       "allowed_values": "*" },
+    { "field_name": "sourceVersion",    "allowed_values": "*" },
+    { "field_name": "docType",          "allowed_values": "*" },
+    { "field_name": "appName",          "allowed_values": "*" },
+    { "field_name": "appUpdateChannel", "allowed_values": "*" },
+    { "field_name": "appVersion",       "allowed_values": "*" }
+  ]
+}
+
