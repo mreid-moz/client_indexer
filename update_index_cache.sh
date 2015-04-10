@@ -5,7 +5,7 @@ aws s3 ls s3://$CACHE_BUCKET/$CACHE_PREFIX/ > s3cache.list
 # List last 30 days
 for n in $(seq 2 30); do
     D=$(date -d "$n days ago" +%Y%m%d)
-    if [ -z "$(grep $D s3cache.list)" ]; then
+    if [ -z "$(grep $D.txt s3cache.list)" ]; then
         echo "$D is missing"
         bash index.sh $D
         bash put_s3.sh $D
@@ -19,7 +19,7 @@ for n in $(seq 0 1); do
     D=$(date -d "$n days ago" +%Y%m%d)
     echo "Checking for diffs in $D"
     bash index.sh $D
-    if [ ! -z "$(grep $D s3cache.list)" ]; then
+    if [ ! -z "$(grep $D.txt s3cache.list)" ]; then
         bash get_s3.sh $D
         if [ -f "$D.s3.txt" ]; then
             if [ ! -z "$(diff $D.s3.txt $D.txt)"]; then
