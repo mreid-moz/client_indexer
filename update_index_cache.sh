@@ -22,8 +22,8 @@ for n in $(seq 0 1); do
     if [ ! -z "$(grep $D.txt s3cache.list)" ]; then
         bash get_s3.sh $D
         if [ -f "$D.s3.txt" ]; then
-            if [ ! -z "$(diff $D.s3.txt $D.txt)"]; then
-                echo "$D had changes since it was last updated"
+            if [ ! -z "$(diff $D.s3.txt $D.txt)" ]; then
+                echo "$D changed since it was last updated"
                 bash put_s3.sh $D
             else
                 echo "$D was correct in S3"
