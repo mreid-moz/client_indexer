@@ -24,6 +24,14 @@ $HEKA_PATH/heka-s3list -bucket $DATA_BUCKET -bucket-prefix $DATA_PREFIX -schema 
 echo "Fetching data for $(wc -l $LIST) files..."
 time cat $LIST | $HEKA_PATH/heka-s3cat -bucket $DATA_BUCKET -format offsets -stdin -output $BASE/$TARGET.tmp &> $TARGET.log
 
+echo "Checking for errors..."
+# TODO: If there are any, exit nonzero.
+ERRS=$(grep -i error $TARGET.log | wc -l)
+if [ "$ERRS" -ne "0" ]; then
+    echo "Encountered indexing errors:"
+    grep -i error $TARGET.log
+fi
+
 echo "Sorting data..."
 # Explicitly set locale so that sorts are stable.
 LC_ALL=C
