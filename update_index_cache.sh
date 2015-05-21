@@ -11,6 +11,10 @@ for n in $(seq 2 30); do
         bash put_s3.sh $D
     else
         echo "$D is already in S3"
+        if [ -z "$LAST_DAY" ]; then
+            # This is the last day we've seen. Stash it for later.
+            LAST_DAY=$D
+        fi
     fi
 done
 
@@ -20,6 +24,7 @@ for n in $(seq 0 1); do
     echo "Checking for diffs in $D"
     bash index.sh $D
     if [ ! -z "$(grep $D.txt s3cache.list)" ]; then
+        NEWER_DAY=$D
         bash get_s3.sh $D
         if [ -f "$D.s3.txt" ]; then
             if [ ! -z "$(diff $D.s3.txt $D.txt)" ]; then
@@ -37,3 +42,11 @@ for n in $(seq 0 1); do
         bash put_s3.sh $D
     fi
 done
+
+# We should try to re-calculate the last-seen date since
+# it most likely only covers part of that day.
+if [ ! -z "$LAST_DAY" -a -z "$NEWER_DAY" ]; then
+    echo "Recalculating $LAST_DAY"
+    bash index.sh $LAST_DAY
+    bash put_s3.sh $LAST_DAY
+fi
