@@ -7,7 +7,6 @@ if [ -z "$TARGET" ]; then
 fi
 
 BASE=$(pwd)
-P=/mnt/work/heka-0_10_0-linux-amd64/bin
 
 echo "Getting client offsets for $TARGET in $DATA_BUCKET"
 
